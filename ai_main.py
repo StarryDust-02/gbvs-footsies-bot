@@ -49,11 +49,10 @@ def footsies_bot(xp: float, yp: float, xb: float, yb: float, \
     dm_range = 1.0              # placeholder
     m_range = 1.0               # placeholder
     h_distance = abs(xb - xp)
-    v_distance = abs(yb - yp)
-    print()
+    v_distance = abs(yb - yp)   # not yet implimented
 
 
-    if attack_rad <= 0.04 and hb < 350:
+    if attack_rad <= 0.04 and hb < 3500:
 
             # become defensive upon low health in higher accuracy settings
             strike_pattern = [True, True, False, False, False, False, False]

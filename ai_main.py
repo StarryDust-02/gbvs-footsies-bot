@@ -3,13 +3,15 @@ import pyautogui, random, time
 
 def run_footsies_bot(xp: float, yp: float, xb: float, yb: float, \
     hp: float, hb: float, level: str='normal', mode: str='balance') -> None:
+
     
     # strike modes
     pattern = [True, False]
     if mode.lower() == 'offensive':
         pattern = [True, True, True, True, True, False, False]
     elif mode.lower() == 'defensive':
-        pattern = [True, True, False, False, False, False, False]    
+        pattern = [True, True, False, False, False, False, False]
+        
     
     # ai accuracy
     # with hit confirms and adaquately accurate

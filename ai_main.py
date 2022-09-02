@@ -1,43 +1,42 @@
-
 import pyautogui, random, time
 
 
 def run_footsies_bot(xp: float, yp: float, xb: float, yb: float, \
-    hp: float, hb: float, level: str='easy', mode: str='balance') -> None:
+    hp: float, hb: float, level: str='normal', mode: str='balance') -> None:
 
     
     # strike modes
+    pattern = [True, False]
     if mode.lower() == 'offensive':
-        strike_pattern = [True, True, True, True, True, False, False]
+        pattern = [True, True, True, True, True, False, False]
     elif mode.lower() == 'defensive':
-        strike_pattern = [True, True, False, False, False, False, False]
-    else:
-        strike_pattern = [True, False]
+        pattern = [True, True, False, False, False, False, False]
+        
     
     # ai accuracy
+    # with hit confirms and adaquately accurate
+    rad = 0.08
+    combo = True
+
     if level.lower() == 'easy':
 
-        # without hit confirms
-        attack_rad = 0.12
+        # without hit confirms and poorly accurate
+        rad = 0.12
         combo = False
-
-    elif level.lower == 'normal':
-
-        # with hit confirms
-        attack_rad = 0.08
-        combo = True
     
     elif level.lower == 'accurate':
 
-        attack_rad = 0.04
+        # with hit confirms and very accurate
+        rad = 0.04
         combo = True
 
     elif level.lower == 'percise':
 
-        attack_rad = 0.01
+        # with hit confirms and a percise sense of range
+        rad = 0.01
         combo = True
 
-    footsies_bot(xp, yp, xb, yb, hp, hb, attack_rad, strike_pattern, combo)
+    footsies_bot(xp, yp, xb, yb, hp, hb, rad, pattern, combo)
     time.sleep(0.01)
     prev_player_health(hp)
 
@@ -46,14 +45,21 @@ def prev_player_health(health: float) -> float:
     return health
 
 
-
 def footsies_bot(xp: float, yp: float, xb: float, yb: float, \
-    hp: float, hb: float, attack_rad: float, strike_pattern: list[bool], combo: bool=False) -> None:
+    hp: float, hb: float, attack_rad: float, strike_pattern: list[bool], combo) -> None:
 
     dm_range = 1.0              # placeholder
     m_range = 1.0               # placeholder
     h_distance = abs(xb - xp)
     v_distance = abs(yb - yp)
+    print()
+
+
+    if attack_rad <= 0.04 and hb < 350:
+
+            # become defensive upon low health in higher accuracy settings
+            strike_pattern = [True, True, False, False, False, False, False]
+            
 
     # walk forward when player is out of range
     if h_distance > (m_range + m_range * attack_rad):
@@ -65,12 +71,12 @@ def footsies_bot(xp: float, yp: float, xb: float, yb: float, \
 
     
     # choose to poke or not poke when player is in range
-    elif h_distance in range(m_range, m_range + m_range * attack_rad):
+    elif m_range <= h_distance <= (m_range + m_range * attack_rad):
 
         strike = random.choice(strike_pattern)
 
         # choose to use 2m or 5m if player in 2m range
-        if strike and h_distance in range(dm_range, dm_range + dm_range * attack_rad):
+        if strike and dm_range <= h_distance <= (dm_range + dm_range * attack_rad):
             use_dm = [True, False]
             if use_dm:
                 pyautogui.keyDown('s')
@@ -82,13 +88,13 @@ def footsies_bot(xp: float, yp: float, xb: float, yb: float, \
         elif strike:
             pyautogui.press('i')
         
-        else:
+        elif strike:
             pyautogui.keyDown('s')
             pyautogui.press(';')
             pyautogui.keyUp('s')
 
     # poke or defense if player gets too close
-    elif h_distance in range(m_range - m_range * attack_rad, m_range):
+    elif (m_range - m_range * attack_rad) <= h_distance < m_range:
 
         strike = random.choice(strike_pattern)
 
@@ -150,26 +156,24 @@ def footsies_bot(xp: float, yp: float, xb: float, yb: float, \
                 else:
                     pyautogui.press(';')
 
+    elif h_distance < (m_range - m_range * attack_rad):
+        pyautogui.press(random.choice([';', 'o']))
+
+
         
-        # hit confirm into 214X
-        if combo and hp < prev_player_health:
-            if xp < xb:
-                pyautogui.keyDown('d')
-                pyautogui.keyDown('i')
-                pyautogui.press('p')
-                pyautogui.keyUp('i')
-                pyautogui.keyUp('d')
+    # hit confirm into 214X
+    if combo and hp < prev_player_health:
+        if xp < xb:
+            pyautogui.keyDown('d')
+            pyautogui.keyDown('i')
+            pyautogui.press('p')
+            pyautogui.keyUp('i')
+            pyautogui.keyUp('d')
 
-            elif xb < xp:
-                pyautogui.keyDown('a')
-                pyautogui.keyDown('i')
-                pyautogui.press('p')
-                pyautogui.keyUp('i')
-                pyautogui.keyUp('a')
-
-        if attack_rad <= 0.04 and hb < 350:
-
-            # become defensive upon low health in higher accuracy settings
-            strike_pattern = [True, True, False, False, False, False, False]
-
+        elif xb < xp:
+            pyautogui.keyDown('a')
+            pyautogui.keyDown('i')
+            pyautogui.press('p')
+            pyautogui.keyUp('i')
+            pyautogui.keyUp('a')
 

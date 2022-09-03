@@ -3,7 +3,7 @@
 A Granblue Fantasy Versus Footsies Practice Bot Using Katalina.
 
 ## Contributors
-Pitched by @StarryDust-02, with help of his friend @RainbowPuppeteer
+Pitched by [@StarryDust-02](https://github.com/StarryDust-02), with helps from his friend [@RainbowPuppeteer](https://github.com/RainbowPuppeteer).
 
 ## Updates
 

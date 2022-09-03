@@ -1,0 +1,31 @@
+﻿<Page
+    x:Class="BotApp.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BotApp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Width="500"
+    Height="320"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid>
+        <StackPanel HorizontalAlignment = "Left" Margin="0,0,0,0">
+            <TextBlock Text = "Hello, world!"  Margin = "20"  Width = "200" 
+            HorizontalAlignment = "Left"/>
+
+            <TextBlock Text = "Write your name." Margin = "20" Width = "200" 
+            HorizontalAlignment = "Left"/>
+
+            <TextBox x:Name = "txtbox"  Width = "280" Margin = "20" 
+            HorizontalAlignment = "Left"/>
+
+            <Button x:Name = "button" Content = "Click Me" Margin = "20" 
+            Click = "button_Click"/>
+
+            <TextBlock x:Name = "txtblock" HorizontalAlignment = "Left" 
+            Margin = "20"/>
+        </StackPanel>
+    </Grid>
+</Page>

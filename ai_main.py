@@ -1,7 +1,10 @@
 import pyautogui, random, time, keyboard
 
+
+PREVIOUS_HEALTH = 10000.0
+
 def run_footsies_bot(xp: float, yp: float, xb: float, yb: float, \
-    hp: float, hb: float, level: str='normal', mode: str='balance') -> None:
+    hp: float=10000.0, hb: float=10000.0, level: str='normal', mode: str='balance') -> None:
     '''
     Parameters (from game)
         - xp: the x position of the player.
@@ -125,7 +128,7 @@ def footsies_bot(xp: float, yp: float, xb: float, yb: float, \
 
         # choose if or not perform an anti-air when applicable.
         anti_air = random.choice([True, True, False, False, False])
-        
+
         # if the bot is at a higher accuracy and has decent health,
         # it will choose to anti-air more often.
         if attack_rad <= 0.04 and hb > 6500:

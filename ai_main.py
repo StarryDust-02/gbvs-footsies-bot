@@ -1,5 +1,4 @@
-import pyautogui, random, time
-
+import pyautogui, random, time, keyboard
 
 def run_footsies_bot(xp: float, yp: float, xb: float, yb: float, \
     hp: float, hb: float, level: str='normal', mode: str='balance') -> None:
@@ -20,6 +19,7 @@ def run_footsies_bot(xp: float, yp: float, xb: float, yb: float, \
     (#) if due to time cannot impliment, default it to 10000.
     
     '''
+    global PREVIOUS_HEALTH
     
     # strike modes
     pattern = [True, False]
@@ -50,10 +50,11 @@ def run_footsies_bot(xp: float, yp: float, xb: float, yb: float, \
         # with hit confirms and a percise sense of range
         rad = 0.01
         combo = True
-
-    footsies_bot(xp, yp, xb, yb, hp, hb, rad, pattern, combo)
-    time.sleep(0.01)
-    prev_player_health(hp)
+    
+    if not keyboard.is_pressed("j"):
+        footsies_bot(xp, yp, xb, yb, hp, hb, rad, pattern, combo, PREVIOUS_HEALTH)
+        time.sleep(0.01)
+        PREVIOUS_HEALTH = prev_player_health(hp)
 
 
 def prev_player_health(health: float) -> float:
@@ -61,7 +62,7 @@ def prev_player_health(health: float) -> float:
 
 
 def footsies_bot(xp: float, yp: float, xb: float, yb: float, \
-    hp: float, hb: float, attack_rad: float, strike_pattern: list[bool], combo) -> None:
+    hp: float, hb: float, attack_rad: float, strike_pattern: list[bool], combo, prev_health: int=10000) -> None:
 
     dm_range = 1.0              # placeholder
     m_range = 1.0               # placeholder
@@ -85,12 +86,12 @@ def footsies_bot(xp: float, yp: float, xb: float, yb: float, \
 
     
     # choose to poke or not poke when player is in range
-    elif m_range <= h_distance <= (m_range + m_range * attack_rad):
+    elif m_range - m_range * attack_rad <= h_distance <= (m_range + m_range * attack_rad):
 
         strike = random.choice(strike_pattern)
 
         # choose to use 2m or 5m if player in 2m range
-        if strike and dm_range <= h_distance <= (dm_range + dm_range * attack_rad):
+        if strike and h_distance <= (dm_range + dm_range * attack_rad):
             use_dm = [True, False]
             if use_dm:
                 pyautogui.keyDown('s')
@@ -102,18 +103,49 @@ def footsies_bot(xp: float, yp: float, xb: float, yb: float, \
         elif strike:
             pyautogui.press('i')
         
-        elif strike:
-            pyautogui.keyDown('s')
-            pyautogui.press(';')
-            pyautogui.keyUp('s')
+        elif not strike:
+            guard = random.choice([True, False])
+            if guard:
+                pyautogui.keyDown('s')
+                pyautogui.press(';')
+                pyautogui.keyUp('s')
+            else:
+                if xp < xb:
+                    pyautogui.press('d')
+                else:
+                    pyautogui.press('a')
 
     # poke or defense if player gets too close
-    elif (m_range - m_range * attack_rad) <= h_distance < m_range:
+    elif h_distance < m_range - (m_range * attack_rad):
 
         strike = random.choice(strike_pattern)
 
         # choose if or not poke with 214X
         use_skill = random.choice([True, False])
+
+        # choose if or not perform an anti-air when applicable.
+        anti_air = random.choice([True, True, False, False, False])
+        
+        # if the bot is at a higher accuracy and has decent health,
+        # it will choose to anti-air more often.
+        if attack_rad <= 0.04 and hb > 6500:
+            anti_air = random.choice([True, True, False])
+
+        # detect player's jump-in and choose weather or not to DP 
+        if attack_rad <= 0.08 and v_distance > 0 and anti_air and hb > 4000:
+            if xp < xb:
+                pyautogui.keyDown('a')
+                pyautogui.keyDown('i')
+                pyautogui.press('p')
+                pyautogui.keyUp('i')
+                pyautogui.keyUp('a')
+
+            elif xb < xp:
+                pyautogui.keyDown('d')
+                pyautogui.keyDown('i')
+                pyautogui.press('p')
+                pyautogui.keyUp('i')
+                pyautogui.keyUp('d')
 
 
         if strike and use_skill:
@@ -141,7 +173,9 @@ def footsies_bot(xp: float, yp: float, xb: float, yb: float, \
             elif attack_rad <= 0.04:
                 stand_u = random.choice([True, False, False])
                 if stand_u:
-                    pyautogui.press('j')
+                    pyautogui.keyDown('j')
+                    time.sleep(random.choice([0.5, 0.7, 0.9, 1.1, 1.3, 1.5]))
+                    pyautogui.keyUp
             else:
                 pyautogui.press('i')
 
@@ -170,13 +204,9 @@ def footsies_bot(xp: float, yp: float, xb: float, yb: float, \
                 else:
                     pyautogui.press(';')
 
-    elif h_distance < (m_range - m_range * attack_rad):
-        pyautogui.press(random.choice([';', 'o']))
-
-
         
     # hit confirm into 214X
-    if combo and hp < prev_player_health:
+    if combo and hp < prev_health - 500 and not anti_air:
         if xp < xb:
             pyautogui.keyDown('d')
             pyautogui.keyDown('i')

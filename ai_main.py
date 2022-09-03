@@ -3,6 +3,23 @@ import pyautogui, random, time
 
 def run_footsies_bot(xp: float, yp: float, xb: float, yb: float, \
     hp: float, hb: float, level: str='normal', mode: str='balance') -> None:
+    '''
+    Parameters (from game)
+        - xp: the x position of the player.
+        - yp: the y position of the player (*).
+        - xb: the x position of the bot.
+        - yb: the y position of the bot (*).
+        - hp: the health of the player (#).
+        - hb: the health of the bot (#).
+
+    Parameters (from user through ui)
+        - level: the intelegence of the bot.
+        - mode: the strike mode of the bot.
+
+    (*) not yet implimented.
+    (#) if due to time cannot impliment, default it to 10000.
+    
+    '''
     
     # strike modes
     pattern = [True, False]
@@ -11,7 +28,7 @@ def run_footsies_bot(xp: float, yp: float, xb: float, yb: float, \
     elif mode.lower() == 'defensive':
         pattern = [True, True, False, False, False, False, False]      
     
-    # ai accuracy
+    # ai accuracy levels
     # with hit confirms and adaquately accurate
     rad = 0.08
     combo = True

@@ -203,12 +203,20 @@ def footsies_bot(xp: float, yp: float, xb: float, yb: float, \
     # walk forward when player is out of range
     if h_distance > (m_range + m_range * attack_rad):
 
-        
+        zoning = random.choice([False, False, False, True])
 
         if xp < xb:
-            random.choice([move_left(), move_left(), move_left(), fireball(random.choice(['l', 'm']))])
+            if zoning:
+                move_right()
+                fireball()
+            else:
+                move_left()
         else:
-            random.choice([move_right(), move_right(), move_right(), fireball(random.choice(['l', 'm']))])
+            if zoning:
+                move_left()
+                fireball()
+            else:
+                move_right()
 
     
     # choose to poke or not poke when player is in range
@@ -325,3 +333,4 @@ def footsies_bot(xp: float, yp: float, xb: float, yb: float, \
     ACTION = False
     pyautogui.keyDown('s')
     pyautogui.keyDown(';')
+    time.sleep(0.15)

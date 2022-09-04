@@ -320,7 +320,7 @@ def footsies_bot(xp: float, yp: float, xb: float, yb: float, \
 
         
     # hit confirm into 214X
-    if combo and hp < prev_health - 500 and not anti_air and poke_strength == 'l':
+    if combo and hp < prev_health - 200 and not anti_air and poke_strength == 'l':
         if xp < xb:
             on_right_enchant('h')
             run_left_pressure()

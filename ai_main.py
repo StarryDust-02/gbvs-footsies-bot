@@ -1,4 +1,4 @@
-import pyautogui, random, time, keyboard
+import pyautogui, random, time
 
 
 PREVIOUS_HEALTH = 10000.0
@@ -55,7 +55,7 @@ def run_footsies_bot(xp: float, yp: float, xb: float, yb: float, \
         rad = 0.01
         combo = True
     
-    if not keyboard.is_pressed("j") and not ACTION:
+    if not ACTION:
         footsies_bot(xp, yp, xb, yb, hp, hb, rad, pattern, combo, PREVIOUS_HEALTH)
         time.sleep(0.01)
         PREVIOUS_HEALTH = prev_player_health(hp)
